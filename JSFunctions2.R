@@ -18,3 +18,14 @@ subsetSigGenes <- function(junctionSeq_rawDF) {
         return(junctionSeq_sigDF)
 }
 
+# Get hgnc symbol and ensembl id for given list of ensembl ids 
+# for human, version 85
+getGeneSymbols <- function(geneList) {
+  ensembl <- useMart(host = 'july2016.archive.ensembl.org',
+                     biomart = 'ENSEMBL_MART_ENSEMBL',
+                     dataset = 'hsapiens_gene_ensembl')
+  query <- getBM(attributes = c('ensembl_gene_id', 'hgnc_symbol'),
+                 filters = 'ensembl_gene_id', values = geneList,
+                 mart = ensembl)
+  return(query)
+}

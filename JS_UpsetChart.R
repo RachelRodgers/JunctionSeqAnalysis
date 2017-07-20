@@ -33,6 +33,6 @@ row.names(upset.df) = upset.df$gene_id
 
 upset.df <- upset.df[ , -c(1)]
 
-pdf("JunctionSeq_UpsetChart.pdf", 7, 5)
+pdf("JunctionSeq_UpsetChart.pdf", 11, 8.5)
 upset( upset.df, text.scale=c( 3, 3, 3, 2, 3, 3), point.size = 5, line.size = 2 )
 dev.off()
