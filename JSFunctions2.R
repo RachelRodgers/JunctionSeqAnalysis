@@ -1,17 +1,20 @@
 # JSFunctions.R
 
 # Read in the .gz file
-readRawJunctionSeq <- function(f, mode = "r", header = TRUE) {
-        f_zipped <- gzfile(f, open = mode)
-        f_unzipped <- read.table(f_zipped, header = header) #Read in as data frame
-        close(f_zipped)
-        return(f_unzipped)
+readRawJunctionSeq <- function(fileName) {
+        zippedFile <- gzfile(fileName, open = 'r')
+        fileContents<- read.table(zippedFile, header = TRUE) #Read in as data frame
+        close(zippedFile)
+        return(fileContents)
 }
 
-# Exclude records from the raw data (read in via readRawJunctionSeq)
-# based on testable and featureType columns
-subsetSigSJ <- function(x) {
-        x_subset <- subset(x, subset = x$testable != FALSE & x$featureType != "exonic_part")
-        return(x_subset)
+# Exclude records from the raw data (previously read in via readRawJunctionSeq)
+# based on testable, featureType, and padjust columns
+subsetSigGenes <- function(junctionSeq_rawDF) {
+        junctionSeq_sigDF <- subset(junctionSeq_rawDF, 
+                                    subset = (testable != FALSE & 
+                                              featureType != "exonic_part" & 
+                                              padjust < 0.05))
+        return(junctionSeq_sigDF)
 }
 
