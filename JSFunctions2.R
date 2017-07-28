@@ -8,6 +8,7 @@ readRawJunctionSeq <- function(fileName) {
         return(fileContents)
 }
 
+
 # Exclude records from the raw data (previously read in via readRawJunctionSeq)
 # based on testable, featureType, and padjust columns
 subsetSigGenes <- function(junctionSeq_rawDF) {
@@ -20,12 +21,12 @@ subsetSigGenes <- function(junctionSeq_rawDF) {
 
 # Get hgnc symbol and ensembl id for given list of ensembl ids 
 # for human, version 85
-getGeneSymbols <- function(geneList) {
-  ensembl <- useMart(host = 'july2016.archive.ensembl.org',
+getGeneSymbols <- function(gene.list) {
+  ensembl <- useMart(host = 'jul2016.archive.ensembl.org',
                      biomart = 'ENSEMBL_MART_ENSEMBL',
                      dataset = 'hsapiens_gene_ensembl')
   query <- getBM(attributes = c('ensembl_gene_id', 'hgnc_symbol'),
-                 filters = 'ensembl_gene_id', values = geneList,
+                 filters = 'ensembl_gene_id', values = gene.list,
                  mart = ensembl)
   return(query)
 }
