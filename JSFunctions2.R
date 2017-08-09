@@ -1,4 +1,4 @@
-# JSFunctions.R
+# JSFunctions2.R
 
 # Read in the .gz file
 readRawJunctionSeq <- function(fileName) {
