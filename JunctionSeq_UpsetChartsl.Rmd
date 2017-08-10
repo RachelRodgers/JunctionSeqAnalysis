@@ -1,0 +1,65 @@
+---
+title: "JunctionSeq Upset Chart"
+author: "Rachel Rodgers"
+date: "August 10, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message=FALSE, fig.path="figures/", fig.keep='all', dpi=300, fig.width=11, fig.height=8.5, fig.ext='jpeg')
+```
+
+```{r imports}
+library(plyr)
+library(dplyr)
+library(magrittr)
+library(UpSetR)
+
+# Script with function definitions.
+source('C:/Users/rache/Desktop/repos/JunctionSeqAnalysis/JSFunctions2.R')
+```
+
+
+```{r PP_v_NN}
+PPvNN.unzipped <- readRawJunctionSeq("C:/users/rache/Desktop/Roberson_Lab/JunctionSeq_SeparateAnalyses_6.19.17/rawJunctionSeqData/PP_v_NNsigGenes.results.txt.gz")
+PPvNN.genes <- subsetSigGenes(PPvNN.unzipped)
+PPvNN.genes <- as.vector(PPvNN.genes[ , "geneID"])
+```
+
+```{r PT_v_NN}
+PTvNN.unzipped <- readRawJunctionSeq("C:/users/rache/Desktop/Roberson_Lab/JunctionSeq_SeparateAnalyses_6.19.17/rawJunctionSeqData/PT_v_NNsigGenes.results.txt.gz")
+PTvNN.genes <- subsetSigGenes(PTvNN.unzipped)
+PTvNN.genes <- as.vector(PTvNN.genes[ , "geneID"])
+```
+
+```{r PT_v_PP}
+PTvPP.unzipped <- readRawJunctionSeq("C:/users/rache/Desktop/Roberson_Lab/JunctionSeq_SeparateAnalyses_6.19.17/rawJunctionSeqData/PT_v_PPsigGenes.results.txt.gz")
+PTvPP.genes <- subsetSigGenes(PTvPP.unzipped)
+PTvPP.genes <- as.vector(PTvPP.genes[ , "geneID"])
+```
+
+```{r build_dataframe}
+universal.gene.list <- unique( c(PPvNN.genes, PTvNN.genes, PTvPP.genes))
+
+# Can't get mutate() to work with piping, need to figure out...
+upset.df <- data.frame(gene_id = universal.gene.list) 
+upset.df <- mutate(upset.df, PPvNN = ifelse(gene_id %in% PPvNN.genes, 1, 0)) 
+upset.df <- mutate(upset.df, PTvNN = ifelse(gene_id %in% PTvNN.genes, 1, 0)) 
+upset.df <- mutate(upset.df, PTvPP = ifelse(gene_id %in% PTvPP.genes, 1, 0))
+
+row.names(upset.df) = upset.df$gene_id
+
+upset.df <- upset.df[ , -c(1)]
+```
+
+```{r make_UpsetChart}
+upset( upset.df, text.scale = c (3,3,3,2,3,3), point.size = 5, line.size = 2)
+```
+
+```{r session_information}
+Sys.time()
+
+getwd()
+  
+sessionInfo()
+```

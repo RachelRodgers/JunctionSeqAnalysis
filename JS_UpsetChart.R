@@ -7,7 +7,7 @@ library(magrittr)
 library(UpSetR)
 
 # Source the functions file
-source("C:/Users/Rachel/Desktop/Roberson_Lab/JSeq_SeparateAnalyses/JunctionSeqAnalysis/JSFunctions2.R")
+source('C:/users/rache/Desktop/repos/JunctionSeqAnalysis/JSFunctions2.R')
 
 # PP_v_NN
 PPvNN.unzipped <- readRawJunctionSeq("PP_v_NNsigGenes.results.txt.gz")
@@ -37,6 +37,6 @@ row.names(upset.df) = upset.df$gene_id
 upset.df <- upset.df[ , -c(1)]
 
 #pdf("JunctionSeq_UpsetChart.pdf", 11, 8.5)
-upset( upset.df, point.size = 5, line.size = 2)
+upset( upset.df, text.scale = c (3,3,3,2,3,3), point.size = 5, line.size = 2)
 # text.scale=c( 3, 3, 3, 2, 3, 3)
 #dev.off()
